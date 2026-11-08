@@ -1,8 +1,11 @@
 package ru.mephi.promoit.wallet.cli;
 
 import ru.mephi.promoit.wallet.cli.command.*;
+import ru.mephi.promoit.wallet.model.Category;
+import ru.mephi.promoit.wallet.model.CategoryType;
 import ru.mephi.promoit.wallet.service.FinanceService;
 
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class ConsoleApplication {
@@ -46,6 +49,36 @@ public class ConsoleApplication {
                             System.out.println("Income added: " + income.amount());
                         }
 
+                        case AddExpenseCommand expense -> {
+                            financeService.addExpense(
+                                expense.category(),
+                                expense.amount()
+                            );
+                            System.out.println("Expense added: " + expense.amount());
+                        }
+
+                        case AddCategoryCommand category -> {
+                            Category created = financeService.addCategory(
+                                category.name(),
+                                category.type()
+                            );
+                            System.out.println("Category created: "
+                                               + created.name() + " (" + created.type() + ")");
+                        }
+
+                        case ListCategoriesCommand ignored -> {
+                            for (CategoryType type : CategoryType.values()) {
+                                System.out.println(type + ":");
+
+                                financeService.getCategories().stream()
+                                    .filter(category -> category.type() == type)
+                                    .sorted(Comparator.comparing(Category::name))
+                                    .forEach(category ->
+                                        System.out.println("  " + category.name())
+                                    );
+                            }
+                        }
+
                         case ShowBalanceCommand ignored -> System.out.println(
                             "Current balance: " + financeService.getBalance()
                         );
@@ -57,6 +90,7 @@ public class ConsoleApplication {
                             running = false;
                         }
                     }
+
                 } catch (IllegalArgumentException e) {
                     System.out.println("Error: " + e.getMessage());
                 }
@@ -67,7 +101,10 @@ public class ConsoleApplication {
     private void printHelp() {
         System.out.println("""
             Available commands:
+              category add <income|expense> <name>
+              category list
               income add <category> <amount>
+              expense add <category> <amount>
               balance
               help
               exit

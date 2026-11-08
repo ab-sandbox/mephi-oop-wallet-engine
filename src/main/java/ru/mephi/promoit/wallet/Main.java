@@ -2,6 +2,7 @@ package ru.mephi.promoit.wallet;
 
 import ru.mephi.promoit.wallet.cli.CommandParser;
 import ru.mephi.promoit.wallet.cli.ConsoleApplication;
+import ru.mephi.promoit.wallet.model.CategoryCatalog;
 import ru.mephi.promoit.wallet.model.Wallet;
 import ru.mephi.promoit.wallet.service.FinanceService;
 
@@ -9,8 +10,13 @@ public class Main {
 
     public static void main(String[] args) {
         Wallet wallet = new Wallet();
+        CategoryCatalog categoryCatalog = new CategoryCatalog();
 
-        FinanceService financeService = new FinanceService(wallet);
+        FinanceService financeService = new FinanceService(
+            wallet,
+            categoryCatalog
+        );
+
         CommandParser parser = new CommandParser();
 
         new ConsoleApplication(financeService, parser).run();

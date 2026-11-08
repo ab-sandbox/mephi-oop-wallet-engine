@@ -1,8 +1,10 @@
 package ru.mephi.promoit.wallet.cli;
 
 import ru.mephi.promoit.wallet.cli.command.*;
+import ru.mephi.promoit.wallet.model.CategoryType;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
 public class CommandParser {
 
@@ -22,20 +24,50 @@ public class CommandParser {
             };
         }
 
-        if (parts.length == 4
-            && parts[0].equals("income")
-            && parts[1].equals("add")) {
+        if (parts.length == 2
+            && parts[0].equals("category")
+            && parts[1].equals("list")) {
+            return new ListCategoriesCommand();
+        }
 
-            try {
-                return new AddIncomeCommand(
-                    parts[2],
-                    new BigDecimal(parts[3])
+        if (parts.length == 4) {
+            if (parts[0].equals("category")
+                && parts[1].equals("add")) {
+                return new AddCategoryCommand(
+                    parts[3],
+                    parseCategoryType(parts[2])
                 );
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Invalid amount", e);
+            }
+
+            if (parts[1].equals("add")) {
+                BigDecimal amount = parseAmount(parts[3]);
+
+                return switch (parts[0]) {
+                    case "income" -> new AddIncomeCommand(parts[2], amount);
+                    case "expense" -> new AddExpenseCommand(parts[2], amount);
+                    default -> throw new IllegalArgumentException("Unknown command");
+                };
             }
         }
 
         throw new IllegalArgumentException("Invalid command syntax");
+    }
+
+    private CategoryType parseCategoryType(String value) {
+        return switch (value.toLowerCase(Locale.ROOT)) {
+            case "income" -> CategoryType.INCOME;
+            case "expense" -> CategoryType.EXPENSE;
+            default -> throw new IllegalArgumentException(
+                "Unknown category type: " + value
+            );
+        };
+    }
+
+    private BigDecimal parseAmount(String value) {
+        try {
+            return new BigDecimal(value);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid amount: " + value, e);
+        }
     }
 }
