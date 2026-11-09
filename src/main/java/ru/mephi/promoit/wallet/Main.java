@@ -2,23 +2,32 @@ package ru.mephi.promoit.wallet;
 
 import ru.mephi.promoit.wallet.cli.CommandParser;
 import ru.mephi.promoit.wallet.cli.ConsoleApplication;
-import ru.mephi.promoit.wallet.model.CategoryCatalog;
-import ru.mephi.promoit.wallet.model.Wallet;
+import ru.mephi.promoit.wallet.model.*;
+import ru.mephi.promoit.wallet.service.BudgetService;
 import ru.mephi.promoit.wallet.service.FinanceService;
 
 public class Main {
 
     public static void main(String[] args) {
         Wallet wallet = new Wallet();
-        CategoryCatalog categoryCatalog = new CategoryCatalog();
+        CategoryCatalog categories = new CategoryCatalog();
+        BudgetCatalog budgets = new BudgetCatalog();
 
         FinanceService financeService = new FinanceService(
             wallet,
-            categoryCatalog
+            categories
         );
 
-        CommandParser parser = new CommandParser();
+        BudgetService budgetService = new BudgetService(
+            budgets,
+            categories,
+            wallet
+        );
 
-        new ConsoleApplication(financeService, parser).run();
+        new ConsoleApplication(
+            financeService,
+            new CommandParser(),
+            budgetService
+        ).run();
     }
 }

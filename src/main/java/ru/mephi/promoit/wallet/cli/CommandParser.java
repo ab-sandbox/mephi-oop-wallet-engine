@@ -24,10 +24,16 @@ public class CommandParser {
             };
         }
 
-        if (parts.length == 2
-            && parts[0].equals("category")
-            && parts[1].equals("list")) {
-            return new ListCategoriesCommand();
+        if (parts.length == 2) {
+            if (parts[0].equals("category")
+                && parts[1].equals("list")) {
+                return new ListCategoriesCommand();
+            }
+
+            if (parts[0].equals("budget")
+                && parts[1].equals("list")) {
+                return new ListBudgetsCommand();
+            }
         }
 
         if (parts.length == 4) {
@@ -36,6 +42,14 @@ public class CommandParser {
                 return new AddCategoryCommand(
                     parts[3],
                     parseCategoryType(parts[2])
+                );
+            }
+
+            if (parts[0].equals("budget")
+                && parts[1].equals("set")) {
+                return new SetBudgetCommand(
+                    parts[2],
+                    parseAmount(parts[3])
                 );
             }
 
