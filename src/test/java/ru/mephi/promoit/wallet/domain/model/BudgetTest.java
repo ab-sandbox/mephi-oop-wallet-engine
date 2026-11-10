@@ -1,7 +1,6 @@
-package ru.mephi.promoit.wallet.model;
+package ru.mephi.promoit.wallet.domain.model;
 
 import org.junit.jupiter.api.Test;
-import ru.mephi.promoit.wallet.domain.model.Budget;
 
 import java.math.BigDecimal;
 import java.util.UUID;

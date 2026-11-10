@@ -1,12 +1,11 @@
-package ru.mephi.promoit.wallet.model;
+package ru.mephi.promoit.wallet.domain.model;
 
 import org.junit.jupiter.api.Test;
-import ru.mephi.promoit.wallet.domain.model.Category;
-import ru.mephi.promoit.wallet.domain.model.CategoryType;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CategoryTest {
 
