@@ -1,7 +1,7 @@
 package ru.mephi.promoit.wallet.cli.parser;
 
 import ru.mephi.promoit.wallet.cli.command.*;
-import ru.mephi.promoit.wallet.model.CategoryType;
+import ru.mephi.promoit.wallet.domain.model.CategoryType;
 
 import java.util.Locale;
 
@@ -9,11 +9,7 @@ public class CategoryCommandParser implements CommandGroupParser {
 
     @Override
     public FinanceCommand parse(String[] parts) {
-        if (parts.length < 2) {
-            throw new IllegalArgumentException(
-                "Category action is required"
-            );
-        }
+        CommandArguments.requireMinLength(parts, 2);
 
         return switch (parts[1]) {
             case "add" -> parseAdd(parts);

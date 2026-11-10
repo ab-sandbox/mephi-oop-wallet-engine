@@ -1,4 +1,6 @@
-package ru.mephi.promoit.wallet.model;
+package ru.mephi.promoit.wallet.repository;
+
+import ru.mephi.promoit.wallet.domain.model.Budget;
 
 import java.util.List;
 import java.util.Map;

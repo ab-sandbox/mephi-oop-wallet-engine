@@ -1,4 +1,7 @@
-package ru.mephi.promoit.wallet.model;
+package ru.mephi.promoit.wallet.repository;
+
+import ru.mephi.promoit.wallet.domain.model.Category;
+import ru.mephi.promoit.wallet.domain.model.CategoryType;
 
 import java.util.ArrayList;
 import java.util.List;

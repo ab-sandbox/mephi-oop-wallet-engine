@@ -2,9 +2,10 @@ package ru.mephi.promoit.wallet.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.mephi.promoit.wallet.model.CategoryCatalog;
-import ru.mephi.promoit.wallet.model.CategoryType;
-import ru.mephi.promoit.wallet.model.Wallet;
+import ru.mephi.promoit.wallet.repository.CategoryCatalog;
+import ru.mephi.promoit.wallet.domain.model.CategoryType;
+import ru.mephi.promoit.wallet.domain.model.Wallet;
+import ru.mephi.promoit.wallet.domain.service.FinanceService;
 
 import java.math.BigDecimal;
 

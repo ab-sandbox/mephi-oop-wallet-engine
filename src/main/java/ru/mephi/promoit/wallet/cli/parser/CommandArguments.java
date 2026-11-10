@@ -16,6 +16,15 @@ public final class CommandArguments {
         }
     }
 
+    public static void requireMinLength(String[] parts, int minimum) {
+        if (parts.length < minimum) {
+            throw new IllegalArgumentException(
+                "Expected at least " + minimum
+                + " command arguments, got " + parts.length
+            );
+        }
+    }
+
     public static BigDecimal parseAmount(String value) {
         try {
             return new BigDecimal(value);

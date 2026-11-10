@@ -3,6 +3,8 @@ package ru.mephi.promoit.wallet.cli;
 
 import ru.mephi.promoit.wallet.cli.command.ExitCommand;
 import ru.mephi.promoit.wallet.cli.command.FinanceCommand;
+import ru.mephi.promoit.wallet.cli.executor.CommandExecutor;
+import ru.mephi.promoit.wallet.cli.parser.CommandParser;
 
 import java.util.Scanner;
 

@@ -1,6 +1,8 @@
 package ru.mephi.promoit.wallet.model;
 
 import org.junit.jupiter.api.Test;
+import ru.mephi.promoit.wallet.domain.model.Transaction;
+import ru.mephi.promoit.wallet.domain.model.TransactionType;
 
 import java.math.BigDecimal;
 import java.time.Instant;

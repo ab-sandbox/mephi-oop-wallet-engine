@@ -2,7 +2,8 @@ package ru.mephi.promoit.wallet.cli;
 
 import org.junit.jupiter.api.Test;
 import ru.mephi.promoit.wallet.cli.command.*;
-import ru.mephi.promoit.wallet.model.CategoryType;
+import ru.mephi.promoit.wallet.cli.parser.CommandParser;
+import ru.mephi.promoit.wallet.domain.model.CategoryType;
 
 import java.math.BigDecimal;
 

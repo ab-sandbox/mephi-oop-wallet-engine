@@ -1,7 +1,6 @@
-package ru.mephi.promoit.wallet.cli;
+package ru.mephi.promoit.wallet.cli.parser;
 
 import ru.mephi.promoit.wallet.cli.command.*;
-import ru.mephi.promoit.wallet.cli.parser.*;
 
 import java.util.Map;
 

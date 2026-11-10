@@ -1,11 +1,11 @@
-package ru.mephi.promoit.wallet.cli;
+package ru.mephi.promoit.wallet.cli.executor;
 
 import ru.mephi.promoit.wallet.cli.command.*;
-import ru.mephi.promoit.wallet.model.Budget;
-import ru.mephi.promoit.wallet.model.Category;
-import ru.mephi.promoit.wallet.model.CategoryType;
-import ru.mephi.promoit.wallet.service.BudgetService;
-import ru.mephi.promoit.wallet.service.FinanceService;
+import ru.mephi.promoit.wallet.domain.model.Budget;
+import ru.mephi.promoit.wallet.domain.model.Category;
+import ru.mephi.promoit.wallet.domain.model.CategoryType;
+import ru.mephi.promoit.wallet.domain.service.BudgetService;
+import ru.mephi.promoit.wallet.domain.service.FinanceService;
 
 import java.util.Comparator;
 
@@ -24,6 +24,7 @@ public class CommandExecutor {
 
     public String execute(FinanceCommand command) {
         return switch (command) {
+
             case AddIncomeCommand income -> {
                 financeService.addIncome(income.category(), income.amount());
                 yield "Income added: " + income.amount();
@@ -79,8 +80,7 @@ public class CommandExecutor {
                 yield result.toString().stripTrailing();
             }
 
-            case ShowBalanceCommand ignored ->
-                "Current balance: " + financeService.getBalance();
+            case ShowBalanceCommand ignored -> "Current balance: " + financeService.getBalance();
 
             case SetBudgetCommand budget -> {
                 budgetService.setBudget(budget.category(), budget.limit());
@@ -113,17 +113,17 @@ public class CommandExecutor {
             }
 
             case HelpCommand ignored -> """
-                    Available commands:
-                      category add <income|expense> <name>
-                      category list
-                      income add <category> <amount>
-                      expense add <category> <amount>
-                      budget set <category> <limit>
-                      budget list
-                      balance
-                      help
-                      exit
-                    """.stripTrailing();
+                Available commands:
+                  category add <income|expense> <name>
+                  category list
+                  income add <category> <amount>
+                  expense add <category> <amount>
+                  budget set <category> <limit>
+                  budget list
+                  balance
+                  help
+                  exit
+                """.stripTrailing();
 
             case ExitCommand ignored -> "Goodbye!";
         };

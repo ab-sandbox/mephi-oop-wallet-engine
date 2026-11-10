@@ -1,6 +1,8 @@
 package ru.mephi.promoit.wallet.model;
 
 import org.junit.jupiter.api.Test;
+import ru.mephi.promoit.wallet.domain.model.Category;
+import ru.mephi.promoit.wallet.domain.model.CategoryType;
 
 import java.util.UUID;
 
