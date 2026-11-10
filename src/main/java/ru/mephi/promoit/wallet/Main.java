@@ -1,8 +1,11 @@
 package ru.mephi.promoit.wallet;
 
+import ru.mephi.promoit.wallet.cli.CommandExecutor;
 import ru.mephi.promoit.wallet.cli.CommandParser;
 import ru.mephi.promoit.wallet.cli.ConsoleApplication;
-import ru.mephi.promoit.wallet.model.*;
+import ru.mephi.promoit.wallet.model.BudgetCatalog;
+import ru.mephi.promoit.wallet.model.CategoryCatalog;
+import ru.mephi.promoit.wallet.model.Wallet;
 import ru.mephi.promoit.wallet.service.BudgetService;
 import ru.mephi.promoit.wallet.service.FinanceService;
 
@@ -24,10 +27,10 @@ public class Main {
             wallet
         );
 
-        new ConsoleApplication(
-            financeService,
-            new CommandParser(),
-            budgetService
-        ).run();
+        CommandParser parser = new CommandParser();
+
+        CommandExecutor executor = new CommandExecutor(financeService, budgetService);
+
+        new ConsoleApplication(parser, executor).run();
     }
 }
