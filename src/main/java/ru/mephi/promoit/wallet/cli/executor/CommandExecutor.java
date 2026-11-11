@@ -1,30 +1,25 @@
 package ru.mephi.promoit.wallet.cli.executor;
 
 import ru.mephi.promoit.wallet.cli.command.*;
-import ru.mephi.promoit.wallet.domain.model.Budget;
-import ru.mephi.promoit.wallet.domain.model.Category;
-import ru.mephi.promoit.wallet.domain.model.CategoryType;
-import ru.mephi.promoit.wallet.domain.model.User;
+import ru.mephi.promoit.wallet.domain.model.*;
 import ru.mephi.promoit.wallet.domain.service.AuthService;
 import ru.mephi.promoit.wallet.domain.service.BudgetService;
 import ru.mephi.promoit.wallet.domain.service.FinanceService;
+import ru.mephi.promoit.wallet.domain.service.UserFinanceService;
 
 import java.util.Comparator;
 
 public class CommandExecutor {
 
-    private final FinanceService financeService;
-    private final BudgetService budgetService;
     private final AuthService authService;
+    private final UserFinanceService userFinanceService;
 
     public CommandExecutor(
-        FinanceService financeService,
-        BudgetService budgetService,
-        AuthService authService
+        AuthService authService,
+        UserFinanceService userFinanceService
     ) {
-        this.financeService = financeService;
-        this.budgetService = budgetService;
         this.authService = authService;
+        this.userFinanceService = userFinanceService;
     }
 
     public String execute(FinanceCommand command) {
@@ -33,11 +28,16 @@ public class CommandExecutor {
         return switch (command) {
 
             case AddIncomeCommand income -> {
+                FinanceService financeService = financeService();
+
                 financeService.addIncome(income.category(), income.amount());
                 yield "Income added: " + income.amount();
             }
 
             case AddExpenseCommand expense -> {
+                FinanceService financeService = financeService();
+                BudgetService budgetService = budgetService();
+
                 financeService.addExpense(expense.category(), expense.amount());
 
                 StringBuilder result = new StringBuilder(
@@ -59,6 +59,9 @@ public class CommandExecutor {
             }
 
             case AddCategoryCommand category -> {
+                FinanceService financeService = financeService();
+                BudgetService budgetService = budgetService();
+
                 Category created = financeService.addCategory(
                     category.name(),
                     category.type()
@@ -69,6 +72,8 @@ public class CommandExecutor {
             }
 
             case ListCategoriesCommand ignored -> {
+                FinanceService financeService = financeService();
+
                 StringBuilder result = new StringBuilder();
 
                 for (CategoryType type : CategoryType.values()) {
@@ -87,9 +92,15 @@ public class CommandExecutor {
                 yield result.toString().stripTrailing();
             }
 
-            case ShowBalanceCommand ignored -> "Current balance: " + financeService.getBalance();
+            case ShowBalanceCommand ignored -> {
+                FinanceService financeService = financeService();
+
+                yield "Current balance: " + financeService.getBalance();
+            }
 
             case SetBudgetCommand budget -> {
+                BudgetService budgetService = budgetService();
+
                 budgetService.setBudget(budget.category(), budget.limit());
 
                 yield "Budget set: " + budget.category()
@@ -97,6 +108,9 @@ public class CommandExecutor {
             }
 
             case ListBudgetsCommand ignored -> {
+                FinanceService financeService = financeService();
+                BudgetService budgetService = budgetService();
+
                 StringBuilder result = new StringBuilder();
 
                 result.append(String.format(
@@ -173,9 +187,24 @@ public class CommandExecutor {
         }
 
         authService.requireCurrentUser();
+    }
 
-        throw new IllegalStateException(
-            "Financial operations are unavailable until user wallets are implemented"
+    private FinanceService financeService() {
+        UserFinance finance = userFinanceService.current();
+
+        return new FinanceService(
+            finance.wallet(),
+            finance.categories()
+        );
+    }
+
+    private BudgetService budgetService() {
+        UserFinance finance = userFinanceService.current();
+
+        return new BudgetService(
+            finance.budgets(),
+            finance.categories(),
+            finance.wallet()
         );
     }
 }
