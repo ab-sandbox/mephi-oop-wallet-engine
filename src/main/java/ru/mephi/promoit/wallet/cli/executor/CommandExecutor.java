@@ -4,6 +4,8 @@ import ru.mephi.promoit.wallet.cli.command.*;
 import ru.mephi.promoit.wallet.domain.model.Budget;
 import ru.mephi.promoit.wallet.domain.model.Category;
 import ru.mephi.promoit.wallet.domain.model.CategoryType;
+import ru.mephi.promoit.wallet.domain.model.User;
+import ru.mephi.promoit.wallet.domain.service.AuthService;
 import ru.mephi.promoit.wallet.domain.service.BudgetService;
 import ru.mephi.promoit.wallet.domain.service.FinanceService;
 
@@ -13,16 +15,21 @@ public class CommandExecutor {
 
     private final FinanceService financeService;
     private final BudgetService budgetService;
+    private final AuthService authService;
 
     public CommandExecutor(
         FinanceService financeService,
-        BudgetService budgetService
+        BudgetService budgetService,
+        AuthService authService
     ) {
         this.financeService = financeService;
         this.budgetService = budgetService;
+        this.authService = authService;
     }
 
     public String execute(FinanceCommand command) {
+        checkAccess(command);
+
         return switch (command) {
 
             case AddIncomeCommand income -> {
@@ -112,8 +119,35 @@ public class CommandExecutor {
                 yield result.toString().stripTrailing();
             }
 
+            case RegisterCommand register -> {
+                User user = authService.register(
+                    register.login(),
+                    register.password()
+                );
+
+                yield "User registered: " + user.login();
+            }
+
+            case LoginCommand login -> {
+                User user = authService.login(
+                    login.login(),
+                    login.password()
+                );
+
+                yield "Logged in as " + user.login();
+            }
+
+            case LogoutCommand ignored -> {
+                authService.requireCurrentUser();
+                authService.logout();
+                yield "Logged out";
+            }
+
             case HelpCommand ignored -> """
                 Available commands:
+                  register <login> <password>
+                  login <login> <password>
+                  logout
                   category add <income|expense> <name>
                   category list
                   income add <category> <amount>
@@ -127,5 +161,21 @@ public class CommandExecutor {
 
             case ExitCommand ignored -> "Goodbye!";
         };
+    }
+
+    private void checkAccess(FinanceCommand command) {
+        if (command instanceof RegisterCommand
+            || command instanceof LoginCommand
+            || command instanceof LogoutCommand
+            || command instanceof HelpCommand
+            || command instanceof ExitCommand) {
+            return;
+        }
+
+        authService.requireCurrentUser();
+
+        throw new IllegalStateException(
+            "Financial operations are unavailable until user wallets are implemented"
+        );
     }
 }

@@ -42,7 +42,7 @@ public class ConsoleApplication {
                         break;
                     }
 
-                } catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException | IllegalStateException e) {
                     System.out.println("Error: " + e.getMessage());
                 }
             }

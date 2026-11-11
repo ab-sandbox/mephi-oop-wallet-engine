@@ -10,12 +10,16 @@ public class CommandParser {
 
     public CommandParser() {
         CommandGroupParser financeParser = new FinanceOperationParser();
+        CommandGroupParser authParser = new AuthCommandParser();
 
         parsers = Map.of(
             "income", financeParser,
             "expense", financeParser,
             "category", new CategoryCommandParser(),
-            "budget", new BudgetCommandParser()
+            "budget", new BudgetCommandParser(),
+            "register", authParser,
+            "login", authParser,
+            "logout", authParser
         );
     }
 

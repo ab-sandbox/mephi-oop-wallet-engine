@@ -1,13 +1,16 @@
 package ru.mephi.promoit.wallet;
 
+import ru.mephi.promoit.wallet.cli.ConsoleApplication;
 import ru.mephi.promoit.wallet.cli.executor.CommandExecutor;
 import ru.mephi.promoit.wallet.cli.parser.CommandParser;
-import ru.mephi.promoit.wallet.cli.ConsoleApplication;
-import ru.mephi.promoit.wallet.repository.BudgetCatalog;
-import ru.mephi.promoit.wallet.repository.CategoryCatalog;
 import ru.mephi.promoit.wallet.domain.model.Wallet;
+import ru.mephi.promoit.wallet.domain.service.AuthService;
 import ru.mephi.promoit.wallet.domain.service.BudgetService;
 import ru.mephi.promoit.wallet.domain.service.FinanceService;
+import ru.mephi.promoit.wallet.repository.BudgetCatalog;
+import ru.mephi.promoit.wallet.repository.CategoryCatalog;
+import ru.mephi.promoit.wallet.repository.UserRepository;
+import ru.mephi.promoit.wallet.security.PasswordHasher;
 
 public class Main {
 
@@ -29,7 +32,18 @@ public class Main {
 
         CommandParser parser = new CommandParser();
 
-        CommandExecutor executor = new CommandExecutor(financeService, budgetService);
+        UserRepository userRepository = new UserRepository();
+
+        AuthService authService = new AuthService(
+            userRepository,
+            new PasswordHasher()
+        );
+
+        CommandExecutor executor = new CommandExecutor(
+            financeService,
+            budgetService,
+            authService
+        );
 
         new ConsoleApplication(parser, executor).run();
     }
