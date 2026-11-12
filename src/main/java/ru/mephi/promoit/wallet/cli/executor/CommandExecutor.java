@@ -2,12 +2,10 @@ package ru.mephi.promoit.wallet.cli.executor;
 
 import ru.mephi.promoit.wallet.cli.command.*;
 import ru.mephi.promoit.wallet.domain.model.*;
-import ru.mephi.promoit.wallet.domain.service.AuthService;
-import ru.mephi.promoit.wallet.domain.service.BudgetService;
-import ru.mephi.promoit.wallet.domain.service.FinanceService;
-import ru.mephi.promoit.wallet.domain.service.UserFinanceService;
+import ru.mephi.promoit.wallet.domain.service.*;
 
 import java.util.Comparator;
+import java.util.List;
 
 public class CommandExecutor {
 
@@ -60,7 +58,6 @@ public class CommandExecutor {
 
             case AddCategoryCommand category -> {
                 FinanceService financeService = financeService();
-                BudgetService budgetService = budgetService();
 
                 Category created = financeService.addCategory(
                     category.name(),
@@ -108,7 +105,6 @@ public class CommandExecutor {
             }
 
             case ListBudgetsCommand ignored -> {
-                FinanceService financeService = financeService();
                 BudgetService budgetService = budgetService();
 
                 StringBuilder result = new StringBuilder();
@@ -128,6 +124,46 @@ public class CommandExecutor {
                         budgetService.getSpent(budget),
                         budgetService.getRemaining(budget)
                     ));
+                }
+
+                yield result.toString().stripTrailing();
+            }
+
+            case SummaryCommand ignored -> {
+                FinanceSummary summary = statisticsService().getSummary();
+
+                yield """
+                    Income:   %s
+                    Expenses: %s
+                    Balance:  %s
+                    """.formatted(
+                    summary.income(),
+                    summary.expenses(),
+                    summary.balance()
+                ).stripTrailing();
+            }
+
+            case CategoryReportCommand report -> {
+                List<CategoryReport> categories =
+                    statisticsService().getCategoryReport(report.type());
+
+                if (categories.isEmpty()) {
+                    yield "No transactions found";
+                }
+
+                StringBuilder result = new StringBuilder();
+
+                result.append(
+                    "%-20s %s%n".formatted("Category", "Amount")
+                );
+
+                for (CategoryReport category : categories) {
+                    result.append(
+                        "%-20s %s%n".formatted(
+                            category.category(),
+                            category.amount()
+                        )
+                    );
                 }
 
                 yield result.toString().stripTrailing();
@@ -169,6 +205,9 @@ public class CommandExecutor {
                   budget set <category> <limit>
                   budget list
                   balance
+                  summary
+                  report income
+                  report expense
                   help
                   exit
                 """.stripTrailing();
@@ -205,6 +244,15 @@ public class CommandExecutor {
             finance.budgets(),
             finance.categories(),
             finance.wallet()
+        );
+    }
+
+    private StatisticsService statisticsService() {
+        UserFinance finance = userFinanceService.current();
+
+        return new StatisticsService(
+            finance.wallet(),
+            finance.categories()
         );
     }
 }

@@ -4,6 +4,7 @@ public sealed interface FinanceCommand
     permits AddCategoryCommand,
     AddExpenseCommand,
     AddIncomeCommand,
+    CategoryReportCommand,
     ExitCommand,
     HelpCommand,
     ListBudgetsCommand,
@@ -12,5 +13,6 @@ public sealed interface FinanceCommand
     LogoutCommand,
     RegisterCommand,
     SetBudgetCommand,
-    ShowBalanceCommand {
+    ShowBalanceCommand,
+    SummaryCommand {
 }

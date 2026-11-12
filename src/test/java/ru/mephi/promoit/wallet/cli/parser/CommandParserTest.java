@@ -3,6 +3,7 @@ package ru.mephi.promoit.wallet.cli.parser;
 import org.junit.jupiter.api.Test;
 import ru.mephi.promoit.wallet.cli.command.*;
 import ru.mephi.promoit.wallet.domain.model.CategoryType;
+import ru.mephi.promoit.wallet.domain.model.TransactionType;
 
 import java.math.BigDecimal;
 
@@ -75,6 +76,46 @@ class CommandParserTest {
         assertInstanceOf(
             ShowBalanceCommand.class,
             parser.parse("balance")
+        );
+    }
+
+    @Test
+    void shouldParseSummary() {
+        assertEquals(
+            new SummaryCommand(),
+            parser.parse("summary")
+        );
+    }
+
+    @Test
+    void shouldParseIncomeReport() {
+        assertEquals(
+            new CategoryReportCommand(TransactionType.INCOME),
+            parser.parse("report income")
+        );
+    }
+
+    @Test
+    void shouldParseExpenseReport() {
+        assertEquals(
+            new CategoryReportCommand(TransactionType.EXPENSE),
+            parser.parse("report expense")
+        );
+    }
+
+    @Test
+    void shouldRejectUnknownReportType() {
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> parser.parse("report unknown")
+        );
+    }
+
+    @Test
+    void shouldRejectReportWithoutType() {
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> parser.parse("report")
         );
     }
 }

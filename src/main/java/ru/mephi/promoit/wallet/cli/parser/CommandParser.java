@@ -19,7 +19,8 @@ public class CommandParser {
             "budget", new BudgetCommandParser(),
             "register", authParser,
             "login", authParser,
-            "logout", authParser
+            "logout", authParser,
+            "report", new ReportCommandParser()
         );
     }
 
@@ -35,6 +36,7 @@ public class CommandParser {
         if (parts.length == 1) {
             return switch (parts[0]) {
                 case "balance" -> new ShowBalanceCommand();
+                case "summary" -> new SummaryCommand();
                 case "help" -> new HelpCommand();
                 case "exit" -> new ExitCommand();
                 default -> parseGroup(parts);
