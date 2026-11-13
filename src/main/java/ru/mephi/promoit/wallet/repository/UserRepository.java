@@ -3,6 +3,7 @@ package ru.mephi.promoit.wallet.repository;
 import ru.mephi.promoit.wallet.domain.model.User;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -22,5 +23,9 @@ public class UserRepository {
 
     public Optional<User> findByLogin(String login) {
         return Optional.ofNullable(users.get(login));
+    }
+
+    public List<User> findAll() {
+        return List.copyOf(users.values());
     }
 }

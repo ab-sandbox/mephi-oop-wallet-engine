@@ -61,4 +61,23 @@ public class CategoryCatalog {
     public List<Category> findAll() {
         return new ArrayList<>(categories.values());
     }
+
+    public void restore(Category category) {
+        if (category == null) {
+            throw new IllegalArgumentException("Category must not be null");
+        }
+
+        boolean exists = categories.containsKey(category.id())
+                         || categories.values().stream()
+                             .anyMatch(existing ->
+                                 existing.type() == category.type()
+                                 && existing.name().equalsIgnoreCase(category.name())
+                             );
+
+        if (exists) {
+            throw new IllegalArgumentException("Category already exists");
+        }
+
+        categories.put(category.id(), category);
+    }
 }

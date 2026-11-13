@@ -16,4 +16,22 @@ public class UserFinanceRepository {
             ignored -> new UserFinance()
         );
     }
+
+    public Map<UUID, UserFinance> findAll() {
+        return Map.copyOf(finances);
+    }
+
+    public void restore(UUID userId, UserFinance finance) {
+        if (userId == null || finance == null) {
+            throw new IllegalArgumentException(
+                "User ID and finance must not be null"
+            );
+        }
+
+        if (finances.putIfAbsent(userId, finance) != null) {
+            throw new IllegalArgumentException(
+                "User finances already exist: " + userId
+            );
+        }
+    }
 }
