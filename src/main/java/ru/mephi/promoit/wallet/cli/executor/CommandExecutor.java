@@ -12,13 +12,16 @@ public class CommandExecutor {
 
     private final AuthService authService;
     private final UserFinanceService userFinanceService;
+    private final TransferService transferService;
 
     public CommandExecutor(
         AuthService authService,
-        UserFinanceService userFinanceService
+        UserFinanceService userFinanceService,
+        TransferService transferService
     ) {
         this.authService = authService;
         this.userFinanceService = userFinanceService;
+        this.transferService = transferService;
     }
 
     public String execute(FinanceCommand command) {
@@ -178,6 +181,15 @@ public class CommandExecutor {
                 yield result.toString();
             }
 
+            case TransferCommand transfer -> {
+                transferService.transfer(
+                    transfer.recipient(),
+                    transfer.amount()
+                );
+                yield "Transferred " + transfer.amount()
+                      + " to " + transfer.recipient();
+            }
+
             case RegisterCommand register -> {
                 User user = authService.register(
                     register.login(),
@@ -211,6 +223,7 @@ public class CommandExecutor {
                   category list
                   income add <category> <amount>
                   expense add <category> <amount>
+                  transfer <recipient> <amount>
                   budget set <category> <limit>
                   budget list
                   balance

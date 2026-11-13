@@ -179,4 +179,128 @@ class JsonPersistenceServiceTest {
 
         assertThrows(IOException.class, persistence::load);
     }
+
+    @Test
+    void shouldPreserveTransferIdAfterReload() throws Exception {
+        UserRepository users = new UserRepository();
+        UserFinanceRepository finances = new UserFinanceRepository();
+
+        User alex = new User(
+            UUID.randomUUID(),
+            "alex",
+            "stored-hash"
+        );
+
+        User bob = new User(
+            UUID.randomUUID(),
+            "bob",
+            "stored-hash"
+        );
+
+        users.save(alex);
+        users.save(bob);
+
+        UserFinance alexFinance = finances.getOrCreate(alex.id());
+        UserFinance bobFinance = finances.getOrCreate(bob.id());
+
+        Category salary = alexFinance.categories().add(
+            "Salary",
+            CategoryType.INCOME
+        );
+
+        Category transferOut = alexFinance.categories().add(
+            SystemCategory.TRANSFER_OUT.categoryName(),
+            SystemCategory.TRANSFER_OUT.categoryType()
+        );
+
+        Category transferIn = bobFinance.categories().add(
+            SystemCategory.TRANSFER_IN.categoryName(),
+            SystemCategory.TRANSFER_IN.categoryType()
+        );
+
+        alexFinance.wallet().addTransaction(new Transaction(
+            UUID.randomUUID(),
+            TransactionType.INCOME,
+            salary.id(),
+            new BigDecimal("5000"),
+            Instant.now(),
+            null
+        ));
+
+        UUID transferId = UUID.randomUUID();
+        UUID expenseId = UUID.randomUUID();
+        UUID incomeId = UUID.randomUUID();
+        Instant createdAt = Instant.now();
+
+        alexFinance.wallet().addTransaction(new Transaction(
+            expenseId,
+            TransactionType.EXPENSE,
+            transferOut.id(),
+            new BigDecimal("1500"),
+            createdAt,
+            transferId
+        ));
+
+        bobFinance.wallet().addTransaction(new Transaction(
+            incomeId,
+            TransactionType.INCOME,
+            transferIn.id(),
+            new BigDecimal("1500"),
+            createdAt,
+            transferId
+        ));
+
+        JsonPersistenceService persistence = new JsonPersistenceService(
+            tempDir.resolve("transfers.json")
+        );
+
+        persistence.save(users, finances);
+
+        LoadedState loaded = persistence.load();
+
+        UserFinance restoredAlex = loaded.finances()
+            .getOrCreate(alex.id());
+
+        UserFinance restoredBob = loaded.finances()
+            .getOrCreate(bob.id());
+
+        Transaction restoredExpense = restoredAlex.wallet()
+            .getTransactions()
+            .stream()
+            .filter(transaction -> transaction.transferId() != null)
+            .findFirst()
+            .orElseThrow();
+
+        Transaction restoredIncome = restoredBob.wallet()
+            .getTransactions()
+            .getFirst();
+
+        assertEquals(expenseId, restoredExpense.id());
+        assertEquals(incomeId, restoredIncome.id());
+
+        assertEquals(transferId, restoredExpense.transferId());
+        assertEquals(transferId, restoredIncome.transferId());
+
+        assertEquals(
+            restoredExpense.transferId(),
+            restoredIncome.transferId()
+        );
+
+        assertEquals(createdAt, restoredExpense.createdAt());
+        assertEquals(createdAt, restoredIncome.createdAt());
+
+        assertEquals(
+            0,
+            new BigDecimal("3500").compareTo(
+                restoredAlex.wallet().getBalance()
+            )
+        );
+
+        assertEquals(
+            0,
+            new BigDecimal("1500").compareTo(
+                restoredBob.wallet().getBalance()
+            )
+        );
+    }
 }

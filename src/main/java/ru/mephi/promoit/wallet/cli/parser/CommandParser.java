@@ -20,7 +20,8 @@ public class CommandParser {
             "register", authParser,
             "login", authParser,
             "logout", authParser,
-            "report", new ReportCommandParser()
+            "report", new ReportCommandParser(),
+            "transfer", new TransferCommandParser()
         );
     }
 

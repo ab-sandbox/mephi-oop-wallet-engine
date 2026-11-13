@@ -17,13 +17,17 @@ public class Wallet {
     }
 
     public BigDecimal getBalance() {
-        return transactions.stream()
-            .map(transaction ->
-                transaction.type() == TransactionType.INCOME
-                    ? transaction.amount()
-                    : transaction.amount().negate()
-            )
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal balance = BigDecimal.ZERO;
+
+        for (Transaction transaction : transactions) {
+            if (transaction.type() == TransactionType.INCOME) {
+                balance = balance.add(transaction.amount());
+            } else {
+                balance = balance.subtract(transaction.amount());
+            }
+        }
+
+        return balance;
     }
 
     public List<Transaction> getTransactions() {

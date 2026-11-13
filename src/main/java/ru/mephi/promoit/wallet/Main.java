@@ -1,10 +1,10 @@
-
 package ru.mephi.promoit.wallet;
 
 import ru.mephi.promoit.wallet.cli.ConsoleApplication;
 import ru.mephi.promoit.wallet.cli.executor.CommandExecutor;
 import ru.mephi.promoit.wallet.cli.parser.CommandParser;
 import ru.mephi.promoit.wallet.domain.service.AuthService;
+import ru.mephi.promoit.wallet.domain.service.TransferService;
 import ru.mephi.promoit.wallet.domain.service.UserFinanceService;
 import ru.mephi.promoit.wallet.persistence.JsonPersistenceService;
 import ru.mephi.promoit.wallet.persistence.LoadedState;
@@ -38,9 +38,16 @@ public class Main {
                 finances
             );
 
+            TransferService transferService = new TransferService(
+                authService,
+                users,
+                finances
+            );
+
             CommandExecutor executor = new CommandExecutor(
                 authService,
-                userFinanceService
+                userFinanceService,
+                transferService
             );
 
             ConsoleApplication application = new ConsoleApplication(
