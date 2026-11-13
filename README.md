@@ -1,5 +1,8 @@
 ## Personal Finance Manager
 
+[![CI](https://github.com/ab-sandbox/mephi-oop-wallet-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/ab-sandbox/mephi-oop-wallet-engine/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/ab-sandbox/mephi-oop-wallet-engine?label=release)](https://github.com/ab-sandbox/mephi-oop-wallet-engine/releases)
+
 Консольное приложение для учета личных финансов на Java 21. Разработано в рамках итогового задания по ООП в МИФИ.
 
 Приложение позволяет вести доходы и расходы, настраивать бюджеты по категориям, получать отчеты и переводить средства
@@ -217,7 +220,8 @@ INCOME:
   TransferIn
 ```
 
-Перевод создает две связанные транзакции: расход у отправителя и доход у получателя. Обе операции имеют общий `transferId`.
+Перевод создает две связанные транзакции: расход у отправителя и доход у получателя. Обе операции имеют общий
+`transferId`.
 
 #### Экспорт в CSV
 
@@ -232,14 +236,16 @@ CSV содержит идентификатор транзакции, тип о�
 
 #### Сохранение данных
 
-При штатном завершении приложения данные пользователей, транзакции, категории и бюджеты сохраняются в `wallet-data.json`.
+При штатном завершении приложения данные пользователей, транзакции, категории и бюджеты сохраняются в
+`wallet-data.json`.
 
 ```text
 finance> exit
 Goodbye!
 ```
 
-При следующем запуске данные загружаются автоматически. После авторизации пользователь продолжает работу со своим кошельком.
+При следующем запуске данные загружаются автоматически. После авторизации пользователь продолжает работу со своим
+кошельком.
 
 Полный список доступных команд можно посмотреть через `help`.
 
@@ -394,3 +400,9 @@ mvn checkstyle:check
 
 GitHub Actions запускает `mvn -B clean verify` при `push` и `pull_request`. Тесты покрывают сервисы, работу команд CLI,
 переводы, сохранение данных и экспорт CSV.
+
+### Релиз
+
+Текущая стабильная версия — [v1.0.0](https://github.com/ab-sandbox/mephi-oop-wallet-engine/releases/tag/v1.0.0).
+
+[GitHub Releases](https://github.com/ab-sandbox/mephi-oop-wallet-engine/releases) — опубликованные версии проекта.
