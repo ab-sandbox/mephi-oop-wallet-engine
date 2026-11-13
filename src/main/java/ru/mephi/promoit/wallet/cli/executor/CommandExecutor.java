@@ -3,7 +3,9 @@ package ru.mephi.promoit.wallet.cli.executor;
 import ru.mephi.promoit.wallet.cli.command.*;
 import ru.mephi.promoit.wallet.domain.model.*;
 import ru.mephi.promoit.wallet.domain.service.*;
+import ru.mephi.promoit.wallet.persistence.CsvExportService;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
@@ -13,15 +15,18 @@ public class CommandExecutor {
     private final AuthService authService;
     private final UserFinanceService userFinanceService;
     private final TransferService transferService;
+    private final CsvExportService csvExportService;
 
     public CommandExecutor(
         AuthService authService,
         UserFinanceService userFinanceService,
-        TransferService transferService
+        TransferService transferService,
+        CsvExportService csvExportService
     ) {
         this.authService = authService;
         this.userFinanceService = userFinanceService;
         this.transferService = transferService;
+        this.csvExportService = csvExportService;
     }
 
     public String execute(FinanceCommand command) {
@@ -190,6 +195,20 @@ public class CommandExecutor {
                       + " to " + transfer.recipient();
             }
 
+            case ExportCommand export -> {
+                try {
+                    int count = csvExportService.export(
+                        userFinanceService.current(),
+                        export.path()
+                    );
+
+                    yield "Exported " + count
+                          + " transactions to " + export.path();
+                } catch (IOException e) {
+                    yield "Failed to export transactions: " + e.getMessage();
+                }
+            }
+
             case RegisterCommand register -> {
                 User user = authService.register(
                     register.login(),
@@ -224,6 +243,7 @@ public class CommandExecutor {
                   income add <category> <amount>
                   expense add <category> <amount>
                   transfer <recipient> <amount>
+                  export csv <file>
                   budget set <category> <limit>
                   budget list
                   balance

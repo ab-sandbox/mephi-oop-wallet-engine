@@ -50,7 +50,8 @@ class TransferCommandIntegrationTest {
         executor = new CommandExecutor(
             authService,
             userFinanceService,
-            transferService
+            transferService,
+            null
         );
     }
 

@@ -6,6 +6,7 @@ import ru.mephi.promoit.wallet.cli.parser.CommandParser;
 import ru.mephi.promoit.wallet.domain.service.AuthService;
 import ru.mephi.promoit.wallet.domain.service.TransferService;
 import ru.mephi.promoit.wallet.domain.service.UserFinanceService;
+import ru.mephi.promoit.wallet.persistence.CsvExportService;
 import ru.mephi.promoit.wallet.persistence.JsonPersistenceService;
 import ru.mephi.promoit.wallet.persistence.LoadedState;
 import ru.mephi.promoit.wallet.repository.UserFinanceRepository;
@@ -44,10 +45,13 @@ public class Main {
                 finances
             );
 
+            CsvExportService csvExportService = new CsvExportService();
+
             CommandExecutor executor = new CommandExecutor(
                 authService,
                 userFinanceService,
-                transferService
+                transferService,
+                csvExportService
             );
 
             ConsoleApplication application = new ConsoleApplication(

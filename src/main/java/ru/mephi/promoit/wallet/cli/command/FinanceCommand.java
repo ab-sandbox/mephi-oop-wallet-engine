@@ -15,5 +15,6 @@ public sealed interface FinanceCommand
     SetBudgetCommand,
     ShowBalanceCommand,
     SummaryCommand,
-    TransferCommand {
+    TransferCommand,
+    ExportCommand {
 }

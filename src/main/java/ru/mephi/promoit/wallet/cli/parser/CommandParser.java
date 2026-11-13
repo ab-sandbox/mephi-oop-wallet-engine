@@ -21,7 +21,8 @@ public class CommandParser {
             "login", authParser,
             "logout", authParser,
             "report", new ReportCommandParser(),
-            "transfer", new TransferCommandParser()
+            "transfer", new TransferCommandParser(),
+            "export", new ExportCommandParser()
         );
     }
 
