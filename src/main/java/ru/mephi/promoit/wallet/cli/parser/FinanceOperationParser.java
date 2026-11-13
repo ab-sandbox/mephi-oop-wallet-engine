@@ -1,6 +1,8 @@
 package ru.mephi.promoit.wallet.cli.parser;
 
-import ru.mephi.promoit.wallet.cli.command.*;
+import ru.mephi.promoit.wallet.cli.command.AddExpenseCommand;
+import ru.mephi.promoit.wallet.cli.command.AddIncomeCommand;
+import ru.mephi.promoit.wallet.cli.command.FinanceCommand;
 
 import java.math.BigDecimal;
 

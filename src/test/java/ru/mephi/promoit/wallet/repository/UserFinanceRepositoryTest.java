@@ -5,7 +5,9 @@ import ru.mephi.promoit.wallet.domain.model.UserFinance;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserFinanceRepositoryTest {
 

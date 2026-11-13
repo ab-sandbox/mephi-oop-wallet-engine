@@ -1,6 +1,9 @@
 package ru.mephi.promoit.wallet.cli.parser;
 
-import ru.mephi.promoit.wallet.cli.command.*;
+import ru.mephi.promoit.wallet.cli.command.FinanceCommand;
+import ru.mephi.promoit.wallet.cli.command.LoginCommand;
+import ru.mephi.promoit.wallet.cli.command.LogoutCommand;
+import ru.mephi.promoit.wallet.cli.command.RegisterCommand;
 
 public class AuthCommandParser implements CommandGroupParser {
 

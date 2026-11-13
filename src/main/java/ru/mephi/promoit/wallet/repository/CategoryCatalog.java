@@ -4,9 +4,9 @@ import ru.mephi.promoit.wallet.domain.model.Category;
 import ru.mephi.promoit.wallet.domain.model.CategoryType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.UUID;
 
 public class CategoryCatalog {

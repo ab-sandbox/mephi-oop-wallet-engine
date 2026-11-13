@@ -11,7 +11,8 @@ import ru.mephi.promoit.wallet.repository.UserFinanceRepository;
 import ru.mephi.promoit.wallet.repository.UserRepository;
 import ru.mephi.promoit.wallet.security.PasswordHasher;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CommandExecutorTest {
 

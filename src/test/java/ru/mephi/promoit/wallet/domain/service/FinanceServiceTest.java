@@ -2,13 +2,15 @@ package ru.mephi.promoit.wallet.domain.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.mephi.promoit.wallet.repository.CategoryCatalog;
 import ru.mephi.promoit.wallet.domain.model.CategoryType;
 import ru.mephi.promoit.wallet.domain.model.Wallet;
+import ru.mephi.promoit.wallet.repository.CategoryCatalog;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FinanceServiceTest {
 

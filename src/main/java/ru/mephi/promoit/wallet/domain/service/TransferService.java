@@ -1,6 +1,11 @@
 package ru.mephi.promoit.wallet.domain.service;
 
-import ru.mephi.promoit.wallet.domain.model.*;
+import ru.mephi.promoit.wallet.domain.model.Category;
+import ru.mephi.promoit.wallet.domain.model.SystemCategory;
+import ru.mephi.promoit.wallet.domain.model.Transaction;
+import ru.mephi.promoit.wallet.domain.model.TransactionType;
+import ru.mephi.promoit.wallet.domain.model.User;
+import ru.mephi.promoit.wallet.domain.model.UserFinance;
 import ru.mephi.promoit.wallet.repository.CategoryCatalog;
 import ru.mephi.promoit.wallet.repository.UserFinanceRepository;
 import ru.mephi.promoit.wallet.repository.UserRepository;

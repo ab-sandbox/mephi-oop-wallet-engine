@@ -1,6 +1,8 @@
 package ru.mephi.promoit.wallet.cli.parser;
 
-import ru.mephi.promoit.wallet.cli.command.*;
+import ru.mephi.promoit.wallet.cli.command.FinanceCommand;
+import ru.mephi.promoit.wallet.cli.command.ListBudgetsCommand;
+import ru.mephi.promoit.wallet.cli.command.SetBudgetCommand;
 
 public class BudgetCommandParser implements CommandGroupParser {
 

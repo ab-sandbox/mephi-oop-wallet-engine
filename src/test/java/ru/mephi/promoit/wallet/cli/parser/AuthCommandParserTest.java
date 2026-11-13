@@ -1,9 +1,12 @@
 package ru.mephi.promoit.wallet.cli.parser;
 
 import org.junit.jupiter.api.Test;
-import ru.mephi.promoit.wallet.cli.command.*;
+import ru.mephi.promoit.wallet.cli.command.LoginCommand;
+import ru.mephi.promoit.wallet.cli.command.LogoutCommand;
+import ru.mephi.promoit.wallet.cli.command.RegisterCommand;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AuthCommandParserTest {
 

@@ -2,13 +2,19 @@ package ru.mephi.promoit.wallet.domain.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.mephi.promoit.wallet.domain.model.*;
+import ru.mephi.promoit.wallet.domain.model.Budget;
+import ru.mephi.promoit.wallet.domain.model.CategoryType;
+import ru.mephi.promoit.wallet.domain.model.Wallet;
 import ru.mephi.promoit.wallet.repository.BudgetCatalog;
 import ru.mephi.promoit.wallet.repository.CategoryCatalog;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BudgetServiceTest {
 

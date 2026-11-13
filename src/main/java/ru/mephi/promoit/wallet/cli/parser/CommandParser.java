@@ -1,6 +1,10 @@
 package ru.mephi.promoit.wallet.cli.parser;
 
-import ru.mephi.promoit.wallet.cli.command.*;
+import ru.mephi.promoit.wallet.cli.command.ExitCommand;
+import ru.mephi.promoit.wallet.cli.command.FinanceCommand;
+import ru.mephi.promoit.wallet.cli.command.HelpCommand;
+import ru.mephi.promoit.wallet.cli.command.ShowBalanceCommand;
+import ru.mephi.promoit.wallet.cli.command.SummaryCommand;
 
 import java.util.Map;
 

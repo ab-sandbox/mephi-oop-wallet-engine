@@ -1,14 +1,24 @@
 package ru.mephi.promoit.wallet.cli.parser;
 
 import org.junit.jupiter.api.Test;
-import ru.mephi.promoit.wallet.cli.command.*;
+import ru.mephi.promoit.wallet.cli.command.AddCategoryCommand;
+import ru.mephi.promoit.wallet.cli.command.AddExpenseCommand;
+import ru.mephi.promoit.wallet.cli.command.AddIncomeCommand;
+import ru.mephi.promoit.wallet.cli.command.CategoryReportCommand;
+import ru.mephi.promoit.wallet.cli.command.FinanceCommand;
+import ru.mephi.promoit.wallet.cli.command.SetBudgetCommand;
+import ru.mephi.promoit.wallet.cli.command.ShowBalanceCommand;
+import ru.mephi.promoit.wallet.cli.command.SummaryCommand;
 import ru.mephi.promoit.wallet.domain.model.CategoryType;
 import ru.mephi.promoit.wallet.domain.model.TransactionType;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CommandParserTest {
 

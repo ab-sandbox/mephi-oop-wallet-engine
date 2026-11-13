@@ -1,6 +1,10 @@
 package ru.mephi.promoit.wallet.domain.service;
 
-import ru.mephi.promoit.wallet.domain.model.*;
+import ru.mephi.promoit.wallet.domain.model.Category;
+import ru.mephi.promoit.wallet.domain.model.CategoryType;
+import ru.mephi.promoit.wallet.domain.model.Transaction;
+import ru.mephi.promoit.wallet.domain.model.TransactionType;
+import ru.mephi.promoit.wallet.domain.model.Wallet;
 import ru.mephi.promoit.wallet.repository.CategoryCatalog;
 
 import java.math.BigDecimal;

@@ -1,10 +1,22 @@
 package ru.mephi.promoit.wallet.domain.service;
 
-import ru.mephi.promoit.wallet.domain.model.*;
+import ru.mephi.promoit.wallet.domain.model.Category;
+import ru.mephi.promoit.wallet.domain.model.CategoryReport;
+import ru.mephi.promoit.wallet.domain.model.CategoryType;
+import ru.mephi.promoit.wallet.domain.model.FinanceSummary;
+import ru.mephi.promoit.wallet.domain.model.Transaction;
+import ru.mephi.promoit.wallet.domain.model.TransactionType;
+import ru.mephi.promoit.wallet.domain.model.Wallet;
 import ru.mephi.promoit.wallet.repository.CategoryCatalog;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class StatisticsService {
 

@@ -1,6 +1,9 @@
 package ru.mephi.promoit.wallet.cli.parser;
 
-import ru.mephi.promoit.wallet.cli.command.*;
+import ru.mephi.promoit.wallet.cli.command.AddCategoryCommand;
+import ru.mephi.promoit.wallet.cli.command.FinanceCommand;
+import ru.mephi.promoit.wallet.cli.command.ListCategoriesCommand;
+import ru.mephi.promoit.wallet.cli.command.RenameCategoryCommand;
 import ru.mephi.promoit.wallet.domain.model.CategoryType;
 
 import java.util.Locale;

@@ -2,7 +2,14 @@ package ru.mephi.promoit.wallet.persistence;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import ru.mephi.promoit.wallet.domain.model.*;
+import ru.mephi.promoit.wallet.domain.model.Budget;
+import ru.mephi.promoit.wallet.domain.model.Category;
+import ru.mephi.promoit.wallet.domain.model.CategoryType;
+import ru.mephi.promoit.wallet.domain.model.SystemCategory;
+import ru.mephi.promoit.wallet.domain.model.Transaction;
+import ru.mephi.promoit.wallet.domain.model.TransactionType;
+import ru.mephi.promoit.wallet.domain.model.User;
+import ru.mephi.promoit.wallet.domain.model.UserFinance;
 import ru.mephi.promoit.wallet.domain.service.FinanceService;
 import ru.mephi.promoit.wallet.repository.UserFinanceRepository;
 import ru.mephi.promoit.wallet.repository.UserRepository;
@@ -14,7 +21,10 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JsonPersistenceServiceTest {
 
