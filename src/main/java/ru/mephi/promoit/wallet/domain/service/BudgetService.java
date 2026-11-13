@@ -9,6 +9,8 @@ import java.util.List;
 
 public class BudgetService {
 
+    private static final BigDecimal WARNING_THRESHOLD = new BigDecimal("0.80");
+
     private final BudgetCatalog budgets;
     private final CategoryCatalog categories;
     private final Wallet wallet;
@@ -78,8 +80,7 @@ public class BudgetService {
                    + remaining.abs();
         }
 
-        BigDecimal threshold = budget.limit()
-            .multiply(new BigDecimal("0.80"));
+        BigDecimal threshold = budget.limit().multiply(WARNING_THRESHOLD);
 
         if (spent.compareTo(threshold) >= 0) {
             return "Warning: 80% or more of "

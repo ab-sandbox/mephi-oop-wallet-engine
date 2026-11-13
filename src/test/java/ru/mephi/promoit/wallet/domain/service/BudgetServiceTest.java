@@ -99,4 +99,23 @@ class BudgetServiceTest {
                 .compareTo(budgetService.getRemaining(budget))
         );
     }
+
+    @Test
+    void shouldNotWarnBelowBudgetThreshold() {
+        budgetService.setBudget("Food", new BigDecimal("4000"));
+        financeService.addExpense("Food", new BigDecimal("3199"));
+
+        assertNull(budgetService.getWarning("Food"));
+    }
+
+    @Test
+    void shouldWarnAtExactBudgetThreshold() {
+        budgetService.setBudget("Food", new BigDecimal("4000"));
+        financeService.addExpense("Food", new BigDecimal("3200"));
+
+        assertEquals(
+            "Warning: 80% or more of Food budget used",
+            budgetService.getWarning("Food")
+        );
+    }
 }

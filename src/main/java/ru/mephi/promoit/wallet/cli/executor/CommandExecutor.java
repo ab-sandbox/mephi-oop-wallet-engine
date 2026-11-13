@@ -57,9 +57,13 @@ public class CommandExecutor {
                     result.append("\n").append(warning);
                 }
 
-                if (financeService.getBalance().signum() < 0) {
+                int balanceSign = financeService.getBalance().signum();
+                if (balanceSign < 0) {
                     result.append("\n")
                         .append("Warning: Total expenses exceed total income!");
+                } else if (balanceSign == 0) {
+                    result.append("\n")
+                        .append("Warning: Balance is zero!");
                 }
 
                 yield result.toString();
