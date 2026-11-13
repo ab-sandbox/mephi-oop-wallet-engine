@@ -6,6 +6,7 @@ import ru.mephi.promoit.wallet.domain.model.CategoryType;
 import ru.mephi.promoit.wallet.domain.model.TransactionType;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -117,5 +118,31 @@ class CommandParserTest {
             IllegalArgumentException.class,
             () -> parser.parse("report")
         );
+    }
+
+    @Test
+    void shouldParseReportWithoutCategories() {
+        CommandParser parser = new CommandParser();
+
+        CategoryReportCommand command = assertInstanceOf(
+            CategoryReportCommand.class,
+            parser.parse("report expense")
+        );
+
+        assertEquals(TransactionType.EXPENSE, command.type());
+        assertTrue(command.categories().isEmpty());
+    }
+
+    @Test
+    void shouldParseReportWithSelectedCategories() {
+        CommandParser parser = new CommandParser();
+
+        CategoryReportCommand command = assertInstanceOf(
+            CategoryReportCommand.class,
+            parser.parse("report expense Food Taxi")
+        );
+
+        assertEquals(TransactionType.EXPENSE, command.type());
+        assertEquals(List.of("Food", "Taxi"), command.categories());
     }
 }

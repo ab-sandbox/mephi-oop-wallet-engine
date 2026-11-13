@@ -4,30 +4,30 @@ import ru.mephi.promoit.wallet.cli.command.CategoryReportCommand;
 import ru.mephi.promoit.wallet.cli.command.FinanceCommand;
 import ru.mephi.promoit.wallet.domain.model.TransactionType;
 
-import java.util.Locale;
+import java.util.Arrays;
+import java.util.List;
 
 public class ReportCommandParser implements CommandGroupParser {
 
     @Override
     public FinanceCommand parse(String[] parts) {
-        CommandArguments.requireLength(parts, 2);
-
-        if (!parts[0].equals("report")) {
-            throw new IllegalArgumentException("Unknown command: " + parts[0]);
-        }
-
-        TransactionType type;
-
-        try {
-            type = TransactionType.valueOf(
-                parts[1].toUpperCase(Locale.ROOT)
-            );
-        } catch (IllegalArgumentException e) {
+        if (parts.length < 2) {
             throw new IllegalArgumentException(
-                "Unknown transaction type: " + parts[1]
+                "Usage: report <income|expense> [categories...]"
             );
         }
 
-        return new CategoryReportCommand(type);
+        TransactionType type = switch (parts[1]) {
+            case "income" -> TransactionType.INCOME;
+            case "expense" -> TransactionType.EXPENSE;
+            default -> throw new IllegalArgumentException(
+                "Unknown report type: " + parts[1]
+            );
+        };
+
+        List<String> categories = Arrays.asList(parts)
+            .subList(2, parts.length);
+
+        return new CategoryReportCommand(type, categories);
     }
 }

@@ -4,11 +4,7 @@ import ru.mephi.promoit.wallet.domain.model.*;
 import ru.mephi.promoit.wallet.repository.CategoryCatalog;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class StatisticsService {
 
@@ -40,6 +36,13 @@ public class StatisticsService {
     }
 
     public List<CategoryReport> getCategoryReport(TransactionType type) {
+        return getCategoryReport(type, List.of());
+    }
+
+    public List<CategoryReport> getCategoryReport(
+        TransactionType type,
+        List<String> selectedCategories
+    ) {
         Map<UUID, BigDecimal> totals = new HashMap<>();
 
         for (Transaction transaction : wallet.getTransactions()) {
@@ -49,22 +52,44 @@ public class StatisticsService {
 
             UUID categoryId = transaction.categoryId();
 
-            BigDecimal current = totals.getOrDefault(categoryId, BigDecimal.ZERO);
+            BigDecimal current = totals.getOrDefault(
+                categoryId,
+                BigDecimal.ZERO
+            );
+
             totals.put(categoryId, current.add(transaction.amount()));
         }
 
         List<CategoryReport> report = new ArrayList<>();
 
-        for (Category category : categories.findAll()) {
-            BigDecimal amount = totals.get(category.id());
+        CategoryType categoryType = switch (type) {
+            case INCOME -> CategoryType.INCOME;
+            case EXPENSE -> CategoryType.EXPENSE;
+        };
 
-            if (amount != null) {
+        if (selectedCategories.isEmpty()) {
+            for (Category category : categories.findAll()) {
+                BigDecimal amount = totals.get(category.id());
+
+                if (category.type() == categoryType && amount != null) {
+                    report.add(new CategoryReport(category.name(), amount));
+                }
+            }
+        } else {
+            for (String name : new LinkedHashSet<>(selectedCategories)) {
+                Category category = categories.findByName(name, categoryType);
+
+                BigDecimal amount = totals.getOrDefault(
+                    category.id(),
+                    BigDecimal.ZERO
+                );
+
                 report.add(new CategoryReport(category.name(), amount));
             }
         }
 
         report.sort(
-            (a, b) -> a.category().compareTo(b.category())
+            Comparator.comparing(CategoryReport::category)
         );
 
         return report;

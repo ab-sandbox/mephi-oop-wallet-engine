@@ -91,4 +91,96 @@ class StatisticsServiceTest {
             new BigDecimal("50000").compareTo(report.getFirst().amount())
         );
     }
+
+    @Test
+    void shouldReportSelectedCategories() {
+        Wallet wallet = new Wallet();
+        CategoryCatalog categories = new CategoryCatalog();
+        FinanceService finance = new FinanceService(wallet, categories);
+
+        finance.addCategory("Food", CategoryType.EXPENSE);
+        finance.addCategory("Taxi", CategoryType.EXPENSE);
+        finance.addCategory("Games", CategoryType.EXPENSE);
+
+        finance.addExpense("Food", new BigDecimal("300"));
+        finance.addExpense("Food", new BigDecimal("500"));
+        finance.addExpense("Taxi", new BigDecimal("1500"));
+        finance.addExpense("Games", new BigDecimal("3000"));
+
+        StatisticsService statistics = new StatisticsService(wallet, categories);
+
+        List<CategoryReport> report = statistics.getCategoryReport(
+            TransactionType.EXPENSE,
+            List.of("Food", "Taxi")
+        );
+
+        assertEquals(2, report.size());
+        assertEquals("Food", report.get(0).category());
+        assertEquals(new BigDecimal("800"), report.get(0).amount());
+        assertEquals("Taxi", report.get(1).category());
+        assertEquals(new BigDecimal("1500"), report.get(1).amount());
+
+        BigDecimal total = report.stream()
+            .map(CategoryReport::amount)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        assertEquals(new BigDecimal("2300"), total);
+    }
+
+    @Test
+    void shouldRejectUnknownCategoryInReport() {
+        StatisticsService statistics = new StatisticsService(
+            new Wallet(),
+            new CategoryCatalog()
+        );
+
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> statistics.getCategoryReport(
+                TransactionType.EXPENSE,
+                List.of("Unknown")
+            )
+        );
+
+        assertEquals("Category not found: Unknown", exception.getMessage());
+    }
+
+    @Test
+    void shouldReportZeroForCategoryWithoutTransactions() {
+        CategoryCatalog categories = new CategoryCatalog();
+        categories.add("Food", CategoryType.EXPENSE);
+
+        StatisticsService statistics = new StatisticsService(
+            new Wallet(),
+            categories
+        );
+
+        List<CategoryReport> report = statistics.getCategoryReport(
+            TransactionType.EXPENSE,
+            List.of("Food")
+        );
+
+        assertEquals(1, report.size());
+        assertEquals("Food", report.getFirst().category());
+        assertEquals(0, BigDecimal.ZERO.compareTo(report.getFirst().amount()));
+    }
+
+    @Test
+    void shouldNotDuplicateSelectedCategories() {
+        CategoryCatalog categories = new CategoryCatalog();
+        categories.add("Food", CategoryType.EXPENSE);
+
+        StatisticsService statistics = new StatisticsService(
+            new Wallet(),
+            categories
+        );
+
+        List<CategoryReport> report = statistics.getCategoryReport(
+            TransactionType.EXPENSE,
+            List.of("Food", "Food")
+        );
+
+        assertEquals(1, report.size());
+        assertEquals("Food", report.get(0).category());
+    }
 }

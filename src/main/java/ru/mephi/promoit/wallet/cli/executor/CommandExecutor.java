@@ -4,6 +4,7 @@ import ru.mephi.promoit.wallet.cli.command.*;
 import ru.mephi.promoit.wallet.domain.model.*;
 import ru.mephi.promoit.wallet.domain.service.*;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 
@@ -144,8 +145,8 @@ public class CommandExecutor {
             }
 
             case CategoryReportCommand report -> {
-                List<CategoryReport> categories =
-                    statisticsService().getCategoryReport(report.type());
+                List<CategoryReport> categories = statisticsService()
+                    .getCategoryReport(report.type(), report.categories());
 
                 if (categories.isEmpty()) {
                     yield "No transactions found";
@@ -157,6 +158,8 @@ public class CommandExecutor {
                     "%-20s %s%n".formatted("Category", "Amount")
                 );
 
+                BigDecimal total = BigDecimal.ZERO;
+
                 for (CategoryReport category : categories) {
                     result.append(
                         "%-20s %s%n".formatted(
@@ -164,9 +167,15 @@ public class CommandExecutor {
                             category.amount()
                         )
                     );
+
+                    total = total.add(category.amount());
                 }
 
-                yield result.toString().stripTrailing();
+                result.append(
+                    "%-20s %s".formatted("Total", total)
+                );
+
+                yield result.toString();
             }
 
             case RegisterCommand register -> {
@@ -208,6 +217,8 @@ public class CommandExecutor {
                   summary
                   report income
                   report expense
+                  report income [categories...]
+                  report expense [categories...]
                   help
                   exit
                 """.stripTrailing();
