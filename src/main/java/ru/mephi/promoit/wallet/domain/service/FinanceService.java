@@ -68,4 +68,12 @@ public class FinanceService {
 
         wallet.addTransaction(transaction);
     }
+
+    public Category renameCategory(
+        String currentName,
+        CategoryType type,
+        String newName
+    ) {
+        return categoryCatalog.rename(currentName, type, newName);
+    }
 }

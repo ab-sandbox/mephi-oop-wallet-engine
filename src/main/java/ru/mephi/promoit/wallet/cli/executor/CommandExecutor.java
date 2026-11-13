@@ -213,6 +213,19 @@ public class CommandExecutor {
                 }
             }
 
+            case RenameCategoryCommand rename -> {
+                Category renamed = financeService().renameCategory(
+                    rename.currentName(),
+                    rename.type(),
+                    rename.newName()
+                );
+
+                yield "Category renamed: "
+                      + rename.currentName()
+                      + " -> "
+                      + renamed.name();
+            }
+
             case RegisterCommand register -> {
                 User user = authService.register(
                     register.login(),
@@ -244,6 +257,7 @@ public class CommandExecutor {
                   logout
                   category add <income|expense> <name>
                   category list
+                  category rename <income|expense> <old-name> <new-name>
                   income add <category> <amount>
                   expense add <category> <amount>
                   transfer <recipient> <amount>

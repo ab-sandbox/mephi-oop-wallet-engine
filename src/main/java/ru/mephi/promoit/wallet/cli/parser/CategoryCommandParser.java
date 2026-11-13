@@ -14,6 +14,7 @@ public class CategoryCommandParser implements CommandGroupParser {
         return switch (parts[1]) {
             case "add" -> parseAdd(parts);
             case "list" -> parseList(parts);
+            case "rename" -> parseRename(parts);
             default -> throw new IllegalArgumentException(
                 "Unknown category action: " + parts[1]
             );
@@ -42,5 +43,15 @@ public class CategoryCommandParser implements CommandGroupParser {
                 "Unknown category type: " + value
             );
         };
+    }
+
+    private FinanceCommand parseRename(String[] parts) {
+        CommandArguments.requireLength(parts, 5);
+
+        return new RenameCategoryCommand(
+            parseCategoryType(parts[2]),
+            parts[3],
+            parts[4]
+        );
     }
 }

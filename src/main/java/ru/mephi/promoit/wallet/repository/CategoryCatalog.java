@@ -80,4 +80,38 @@ public class CategoryCatalog {
 
         categories.put(category.id(), category);
     }
+
+    public Category rename(
+        String currentName,
+        CategoryType type,
+        String newName
+    ) {
+        Category current = findByName(currentName, type);
+
+        if (newName == null || newName.isBlank()) {
+            throw new IllegalArgumentException("Category name must not be blank");
+        }
+
+        String normalizedName = newName.trim();
+
+        boolean exists = categories.values().stream()
+            .anyMatch(category ->
+                !category.id().equals(current.id())
+                && category.type() == type
+                && category.name().equalsIgnoreCase(normalizedName)
+            );
+
+        if (exists) {
+            throw new IllegalArgumentException("Category already exists");
+        }
+
+        Category renamed = new Category(
+            current.id(),
+            normalizedName,
+            current.type()
+        );
+
+        categories.put(renamed.id(), renamed);
+        return renamed;
+    }
 }

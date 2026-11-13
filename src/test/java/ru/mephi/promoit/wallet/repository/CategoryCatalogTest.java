@@ -63,4 +63,64 @@ class CategoryCatalogTest {
             () -> catalog.restore(duplicate)
         );
     }
+
+    @Test
+    void shouldRenameCategoryPreservingId() {
+        CategoryCatalog catalog = new CategoryCatalog();
+
+        Category original = catalog.add("Food", CategoryType.EXPENSE);
+
+        Category renamed = catalog.rename(
+            "Food",
+            CategoryType.EXPENSE,
+            "Groceries"
+        );
+
+        assertEquals(original.id(), renamed.id());
+        assertEquals(CategoryType.EXPENSE, renamed.type());
+        assertEquals("Groceries", renamed.name());
+
+        assertEquals(
+            renamed,
+            catalog.findByName("Groceries", CategoryType.EXPENSE)
+        );
+
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> catalog.findByName("Food", CategoryType.EXPENSE)
+        );
+    }
+
+    @Test
+    void shouldRejectDuplicateNameOnRename() {
+        CategoryCatalog catalog = new CategoryCatalog();
+
+        catalog.add("Food", CategoryType.EXPENSE);
+        catalog.add("Transport", CategoryType.EXPENSE);
+
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> catalog.rename(
+                "Food",
+                CategoryType.EXPENSE,
+                "Transport"
+            )
+        );
+    }
+
+    @Test
+    void shouldAllowRenamingToSameNameWithDifferentCase() {
+        CategoryCatalog catalog = new CategoryCatalog();
+
+        Category original = catalog.add("Food", CategoryType.EXPENSE);
+
+        Category renamed = catalog.rename(
+            "Food",
+            CategoryType.EXPENSE,
+            "food"
+        );
+
+        assertEquals(original.id(), renamed.id());
+        assertEquals("food", renamed.name());
+    }
 }
